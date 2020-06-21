@@ -1,0 +1,19 @@
+FROM python:3.7-slim
+
+RUN pip install pipenv
+
+RUN pip install psycopg2-binary
+
+ENV SRC_DIR /usr/local/src/server
+
+WORKDIR ${SRC_DIR}
+
+COPY Pipfile Pipfile.lock ${SRC_DIR}/
+
+RUN pipenv install --system --clear
+
+WORKDIR ${SRC_DIR}/src
+
+EXPOSE 5000
+
+CMD ["flask", "run", "-h", "0.0.0.0"]

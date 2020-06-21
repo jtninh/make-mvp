@@ -1,0 +1,36 @@
+version: "3.6"
+
+services:
+  client:
+    build: client
+    networks:
+      - default
+    ports:
+      - 4200:4200
+    restart: always
+    volumes:
+      - ./client:/usr/local/src/client
+  server:
+    build: server
+    depends_on:
+      - db
+    networks:
+      - default
+    ports:
+      - 5000:5000
+    restart: always
+    volumes:
+      - ./server:/usr/local/src/server
+  db:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: public
+    image: postgres:latest
+    networks:
+      - default
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - ./db:/var/lib/postgresql/data
